@@ -23,6 +23,7 @@ type Config struct {
 type Service struct {
 	URL       string     `json:"url"`
 	Title     string     `json:"title"`
+	Headers   []string   `json:"headers"` // New field for custom headers
 	Selectors []Selector `json:"selectors"`
 }
 
@@ -335,7 +336,7 @@ func renderService(service ServiceData, index int, width int, spinner int) strin
 	// Add separator except for last item
 	separator := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("240")).
-		Render(strings.Repeat("─", min(width-4, 80)))
+		Render(strings.Repeat("─", width-4))
 	result = append(result, separator)
 
 	return lipgloss.JoinVertical(lipgloss.Left, result...)
@@ -348,11 +349,49 @@ func min(a, b int) int {
 	return b
 }
 
+func prepareHeaders(headerLines []string) http.Header {
+	headers := make(http.Header)
+	for _, line := range headerLines {
+		parts := strings.SplitN(line, ":", 2)
+		if len(parts) != 2 {
+			log.Printf("Warning: Invalid header format: %s. Expected 'Key: Value'.", line)
+			continue
+		}
+		key := strings.TrimSpace(parts[0])
+		value := strings.TrimSpace(parts[1])
+
+		// Environment variable substitution
+		if strings.HasPrefix(value, "{") && strings.HasSuffix(value, "}") {
+			envVarName := strings.TrimSuffix(strings.TrimPrefix(value, "{"), "}")
+			envValue := os.Getenv(envVarName)
+			if envValue == "" {
+				log.Printf("Warning: Environment variable %s not set for header %s.", envVarName, key)
+			}
+			value = envValue
+		}
+		headers.Add(key, value)
+	}
+	return headers
+}
+
 func fetchService(index int, service Service) tea.Cmd {
 	return func() tea.Msg {
 		start := time.Now()
 		client := &http.Client{Timeout: 10 * time.Second}
-		resp, err := client.Get(service.URL)
+	
+		req, err := http.NewRequest("GET", service.URL, nil)
+		if err != nil {
+			return fetchMsg{index: index, err: err, responseTime: 0} // No response time for request creation error
+		}
+
+		// Add custom headers
+		for key, values := range prepareHeaders(service.Headers) {
+			for _, value := range values {
+				req.Header.Add(key, value)
+			}
+		}
+		
+		resp, err := client.Do(req)
 		responseTime := time.Since(start)
 
 		if err != nil {

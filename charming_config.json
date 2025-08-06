@@ -3,6 +3,9 @@
     {
       "url": "https://api.github.com/repos/microsoft/vscode",
       "title": "🆚 VS Code",
+      "headers": [
+        "X-Test-Header: {TEST_API_KEY}"
+      ],
       "selectors": [
         {
           "name": "⭐ Stars",
