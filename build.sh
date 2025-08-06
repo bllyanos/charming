@@ -52,10 +52,10 @@ fi
 # Show usage
 echo -e "${BLUE}🚀 Usage:${NC}"
 if [[ ":$PATH:" == *":$INSTALL_DIR:"* ]]; then
-    echo -e "   ${GREEN}charming${NC}                    # Run with config.json"
+    echo -e "   ${GREEN}charming${NC}                    # Run with charming_config.json"
     echo -e "   ${GREEN}charming my-config.json${NC}     # Run with custom config"
 else
-    echo -e "   ${GREEN}$INSTALL_DIR/charming${NC}                    # Run with config.json"
+    echo -e "   ${GREEN}$INSTALL_DIR/charming${NC}                    # Run with charming_config.json"
     echo -e "   ${GREEN}$INSTALL_DIR/charming my-config.json${NC}     # Run with custom config"
 fi
 
