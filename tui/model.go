@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"log"
 	"time"
 
 	"github.com/bllyanos/charming/config"
@@ -19,6 +20,10 @@ type Model struct {
 }
 
 type spinnerMsg struct{}
+
+type refreshServiceMsg struct {
+	Index int
+}
 
 func InitialModel(config config.Config) Model {
 	services := make([]service.ServiceData, len(config.Services))
@@ -49,16 +54,35 @@ func (m Model) Init() tea.Cmd {
 		return spinnerMsg{}
 	}))
 
-	// Fetch initial data for all services
+	// Fetch initial data and schedule periodic fetches for all services
 	for i := range m.services {
+		// Initial fetch
 		cmds = append(cmds, service.FetchService(i, m.services[i].Service))
+
+		// Determine refresh interval for the current service
+		refreshIntervalStr := m.services[i].Service.RefreshInterval
+		if refreshIntervalStr == "" {
+			refreshIntervalStr = m.config.RefreshInterval
+		}
+
+		// Parse refresh interval, default to 30 seconds if invalid or not set
+		refreshDuration, err := time.ParseDuration(refreshIntervalStr)
+		if err != nil || refreshDuration <= 0 {
+			log.Printf("Warning: Invalid refresh interval '%s' for service %s. Defaulting to 30s.", refreshIntervalStr, m.services[i].Service.Title)
+			refreshDuration = 30 * time.Second
+		}
+
+		// Schedule periodic refresh
+		cmds = append(cmds, tea.Tick(refreshDuration, func(t time.Time) tea.Msg {
+			return refreshServiceMsg{Index: i}
+		}))
 	}
 
 	return tea.Batch(cmds...)
 }
 
 func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
+	var cmd tea.Cmd // This will hold the command to return
 
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -115,7 +139,34 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Tick(100*time.Millisecond, func(t time.Time) tea.Msg {
 			return spinnerMsg{}
 		})
+
+	case refreshServiceMsg:
+		if msg.Index < len(m.services) {
+			// Mark service as loading and clear error before fetching
+			m.services[msg.Index].Loading = true
+			m.services[msg.Index].Error = ""
+
+			// Fetch and reschedule
+			refreshCmd := service.FetchService(msg.Index, m.services[msg.Index].Service)
+
+			refreshIntervalStr := m.services[msg.Index].Service.RefreshInterval
+			if refreshIntervalStr == "" {
+				refreshIntervalStr = m.config.RefreshInterval
+			}
+
+			refreshDuration, err := time.ParseDuration(refreshIntervalStr)
+			if err != nil || refreshDuration <= 0 {
+				log.Printf("Warning: Invalid refresh interval '%s' for service %s. Defaulting to 30s.", refreshIntervalStr, m.services[msg.Index].Service.Title)
+				refreshDuration = 30 * time.Second
+			}
+			rescheduleCmd := tea.Tick(refreshDuration, func(t time.Time) tea.Msg {
+				return refreshServiceMsg{Index: msg.Index}
+			})
+
+			return m, tea.Batch(refreshCmd, rescheduleCmd)
+		}
+		return m, nil // Should not happen if index is out of bounds
 	}
 
-	return m, nil
+	return m, cmd // Return the model and the command
 }

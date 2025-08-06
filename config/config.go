@@ -6,14 +6,16 @@ import (
 )
 
 type Config struct {
-	Services []Service `json:"services"`
+	RefreshInterval string    `json:"refresh_interval"`
+	Services        []Service `json:"services"`
 }
 
 type Service struct {
-	URL       string     `json:"url"`
-	Title     string     `json:"title"`
-	Headers   []string   `json:"headers"`
-	Selectors []Selector `json:"selectors"`
+	URL             string     `json:"url"`
+	Title           string     `json:"title"`
+	Headers         []string   `json:"headers"`
+	RefreshInterval string     `json:"refresh_interval"`
+	Selectors       []Selector `json:"selectors"`
 }
 
 type Selector struct {
