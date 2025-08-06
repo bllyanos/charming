@@ -2,6 +2,45 @@
 
 A simple CLI dashboard built with Bubble Tea that displays data from JSON APIs with automatic initial load and manual refresh.
 
+## Requirements
+
+- **Go 1.24.5+** (required for building)
+- **Terminal with color support** (recommended)
+- **Internet connection** (for fetching API data)
+
+## Quick Start
+
+### 1. Build & Install (Recommended)
+```bash
+# Clone the repository
+git clone https://github.com/bllyanos/charming.git
+cd charming
+
+# Build and install to ~/.local/bin
+./build.sh
+
+# Run from anywhere
+charming
+```
+
+### 2. Manual Build
+```bash
+# Build the binary
+go build -o charming main.go
+
+# Run the dashboard
+./charming
+
+# Run with custom config
+./charming my-config.json
+```
+
+### 3. Development Mode
+```bash
+# Run directly with Go (for development only)
+go run main.go
+```
+
 ## Features
 
 - Automatic data fetching on startup
@@ -16,12 +55,18 @@ A simple CLI dashboard built with Bubble Tea that displays data from JSON APIs w
 
 ## Usage
 
-```bash
-# Run with default config.json
-go run main.go
+After building, you can run the dashboard with:
 
-# Run with custom config file
-go run main.go my-config.json
+```bash
+# Use default config.json
+charming
+
+# Use custom configuration file
+charming my-config.json
+
+# Examples with different configs
+charming production.json
+charming staging.json
 ```
 
 ## Controls
@@ -108,6 +153,30 @@ Creates binaries and archives for:
 
 ### Manual Build
 ```bash
-go build -o dashboard main.go
-./dashboard
+go build -o charming main.go
+./charming
 ```
+
+## Installation Notes
+
+- The build script installs to `~/.local/bin/charming`
+- Make sure `~/.local/bin` is in your PATH for system-wide access
+- If PATH is not configured, the build script will show instructions
+- Use `which charming` to verify installation
+
+## Troubleshooting
+
+### Command not found
+If you get "command not found" after building:
+```bash
+# Check if ~/.local/bin is in PATH
+echo $PATH | grep -q "$HOME/.local/bin" && echo "✓ PATH configured" || echo "✗ PATH not configured"
+
+# Add to your shell profile (.bashrc, .zshrc, etc.)
+export PATH="$PATH:$HOME/.local/bin"
+```
+
+### Build Issues
+- Ensure Go 1.24.5+ is installed: `go version`
+- Run `go mod tidy` to resolve dependencies
+- Check internet connection for module downloads
