@@ -58,7 +58,7 @@ go run main.go
 After building, you can run the dashboard with:
 
 ```bash
-# Use default config.json
+# Use default charming_config.json
 charming
 
 # Use custom configuration file
@@ -83,7 +83,7 @@ The dashboard automatically fetches data from all configured services when it st
 
 ## Configuration
 
-Create a `config.json` file with the following structure:
+Create a `charming_config.json` file with the following structure:
 
 ```json
 {

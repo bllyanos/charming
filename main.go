@@ -390,7 +390,7 @@ func loadConfig(filename string) (Config, error) {
 }
 
 func main() {
-	configFile := "config.json"
+	configFile := "charming_config.json"
 	if len(os.Args) > 1 {
 		configFile = os.Args[1]
 	}

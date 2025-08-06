@@ -70,10 +70,10 @@ for target in "${targets[@]}"; do
     archive_name="$BINARY_NAME-$VERSION-$GOOS-$GOARCH"
     
     if [ "$GOOS" = "windows" ]; then
-        zip -q "$archive_name.zip" "$binary_name" ../config.json ../README.md
+        zip -q "$archive_name.zip" "$binary_name" ../charming_config.json ../README.md
         echo -e "${GREEN}✅ $archive_name.zip${NC}"
     else
-        tar -czf "$archive_name.tar.gz" "$binary_name" ../config.json ../README.md
+        tar -czf "$archive_name.tar.gz" "$binary_name" ../charming_config.json ../README.md
         echo -e "${GREEN}✅ $archive_name.tar.gz${NC}"
     fi
 done
