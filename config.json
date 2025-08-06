@@ -1,0 +1,164 @@
+{
+  "services": [
+    {
+      "url": "https://api.github.com/repos/microsoft/vscode",
+      "title": "🆚 VS Code",
+      "selectors": [
+        {
+          "name": "⭐ Stars",
+          "value": "stargazers_count"
+        },
+        {
+          "name": "🍴 Forks",
+          "value": "forks_count"
+        },
+        {
+          "name": "📝 Language",
+          "value": "language"
+        },
+        {
+          "name": "📊 Size",
+          "value": "size"
+        }
+      ]
+    },
+    {
+      "url": "https://api.github.com/repos/golang/go",
+      "title": "🐹 Go Language",
+      "selectors": [
+        {
+          "name": "⭐ Stars",
+          "value": "stargazers_count"
+        },
+        {
+          "name": "🐛 Issues",
+          "value": "open_issues_count"
+        },
+        {
+          "name": "📅 Updated",
+          "value": "updated_at"
+        }
+      ]
+    },
+    {
+      "url": "https://api.spacexdata.com/v4/launches/latest",
+      "title": "🚀 SpaceX Latest Launch",
+      "selectors": [
+        {
+          "name": "🚀 Mission",
+          "value": "name"
+        },
+        {
+          "name": "📅 Date",
+          "value": "date_local"
+        },
+        {
+          "name": "✅ Success",
+          "value": "success"
+        },
+        {
+          "name": "🔗 Details",
+          "value": "details"
+        }
+      ]
+    },
+    {
+      "url": "https://api.github.com/repos/vercel/next.js",
+      "title": "⚡ Next.js",
+      "selectors": [
+        {
+          "name": "⭐ Stars",
+          "value": "stargazers_count"
+        },
+        {
+          "name": "👀 Watchers",
+          "value": "watchers_count"
+        },
+        {
+          "name": "📦 Size",
+          "value": "size"
+        }
+      ]
+    },
+    {
+      "url": "https://api.github.com/repos/facebook/react",
+      "title": "⚛️ React",
+      "selectors": [
+        {
+          "name": "⭐ Stars",
+          "value": "stargazers_count"
+        },
+        {
+          "name": "🍴 Forks",
+          "value": "forks_count"
+        },
+        {
+          "name": "🐛 Issues",
+          "value": "open_issues_count"
+        },
+        {
+          "name": "📝 Language",
+          "value": "language"
+        }
+      ]
+    },
+    {
+      "url": "https://api.github.com/repos/rust-lang/rust",
+      "title": "🦀 Rust Language",
+      "selectors": [
+        {
+          "name": "⭐ Stars",
+          "value": "stargazers_count"
+        },
+        {
+          "name": "🍴 Forks",
+          "value": "forks_count"
+        },
+        {
+          "name": "📊 Size",
+          "value": "size"
+        }
+      ]
+    },
+    {
+      "url": "https://api.github.com/users/octocat",
+      "title": "🐙 GitHub Octocat",
+      "selectors": [
+        {
+          "name": "👤 Name",
+          "value": "name"
+        },
+        {
+          "name": "🏢 Company",
+          "value": "company"
+        },
+        {
+          "name": "📍 Location",
+          "value": "location"
+        },
+        {
+          "name": "👥 Followers",
+          "value": "followers"
+        }
+      ]
+    },
+    {
+      "url": "https://api.github.com/repos/nodejs/node",
+      "title": "💚 Node.js",
+      "selectors": [
+        {
+          "name": "⭐ Stars",
+          "value": "stargazers_count"
+        },
+        {
+          "name": "🍴 Forks",
+          "value": "forks_count"
+        },
+        {
+          "name": "🐛 Issues",
+          "value": "open_issues_count"
+        }
+      ]
+    }
+  ]
+}
