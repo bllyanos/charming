@@ -13,6 +13,6 @@ Here's a summary of my understanding:
     *   The UI supports scrolling, manual refresh, and shows loading spinners.
 *   **How to run:**
     *   It can be built using `go build` or the provided `./build.sh` script.
-    *   The application is started by running the compiled binary, optionally passing a path to a custom configuration file.
+    *   The application is started by running the compiled binary from the `build/` directory (e.g., `build/charming`), optionally passing a path to a custom configuration file.
 
 In essence, it's a terminal-based status board that can be customized to display key information from various web services.

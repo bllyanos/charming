@@ -3,6 +3,8 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"os/user"
+	"path/filepath"
 )
 
 type Config struct {
@@ -23,10 +25,36 @@ type Selector struct {
 	Value string `json:"value"`
 }
 
-func LoadConfig(filename string) (Config, error) {
+// GetConfigPath determines the path to the charming_config.json file.
+// It first checks the current working directory, then the user's home directory.
+func GetConfigPath(filename string) (string, error) {
+	// Check current working directory
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	currentPath := filepath.Join(cwd, filename)
+	if _, err := os.Stat(currentPath); err == nil {
+		return currentPath, nil
+	}
+
+	// Check home directory
+	usr, err := user.Current()
+	if err != nil {
+		return "", err
+	}
+	homePath := filepath.Join(usr.HomeDir, filename)
+	if _, err := os.Stat(homePath); err == nil {
+		return homePath, nil
+	}
+
+	return "", os.ErrNotExist // File not found in either location
+}
+
+func LoadConfig(filepath string) (Config, error) {
 	var config Config
 
-	file, err := os.Open(filename)
+	file, err := os.Open(filepath)
 	if err != nil {
 		return config, err
 	}

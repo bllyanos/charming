@@ -77,12 +77,14 @@ func prepareHeaders(headerLines []string) http.Header {
 		if strings.HasPrefix(value, "{") && strings.HasSuffix(value, "}") {
 			envVarName := strings.TrimSuffix(strings.TrimPrefix(value, "{"), "}")
 			envValue := os.Getenv(envVarName)
-			if envValue == "" {
-				log.Printf("Warning: Environment variable %s not set for header %s.", envVarName, key)
-			}
+			// If environment variable is not set, value will become empty.
 			value = envValue
 		}
-		headers.Add(key, value)
+
+		// Only add the header if both key and value are not empty after processing.
+		if key != "" && value != "" {
+			headers.Add(key, value)
+		}
 	}
 	return headers
 }
